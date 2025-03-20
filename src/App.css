@@ -1,3 +1,4 @@
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -34,6 +35,7 @@
 /* Add this to ensure all animations complete properly */
 * {
   animation-fill-mode: forwards !important;
+  visibility: visible !important; /* Force visibility */
 }
 
 @media (prefers-reduced-motion: no-preference) {
