@@ -1,4 +1,3 @@
-
 export interface IdeaTag {
   name: string;
   color: string;
@@ -258,8 +257,8 @@ export const filterIdeas = (
 };
 
 // Function to get random ideas
-export const getRandomIdeas = (count: number = 3): Idea[] => {
-  const shuffled = [...ideasDatabase].sort(() => 0.5 - Math.random());
+export const getRandomIdeas = (ideas: Idea[] = ideasDatabase, count: number = 3): Idea[] => {
+  const shuffled = [...ideas].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
 };
 

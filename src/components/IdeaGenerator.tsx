@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -228,7 +227,7 @@ const IdeaGenerator: React.FC<IdeaGeneratorProps> = ({ className }) => {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="sync">
           {isLoading ? (
             // Loading placeholders
             [...Array(3)].map((_, i) => (
