@@ -43,7 +43,7 @@ const IdeaGenerator: React.FC<IdeaGeneratorProps> = ({ className }) => {
       );
 
       // Get 3 random ideas from filtered results
-      const randomIdeas = [...newIdeas].sort(() => 0.5 - Math.random()).slice(0, 3);
+      const randomIdeas = getRandomIdeas(newIdeas, 3);
       
       setIdeas(randomIdeas);
       setIsLoading(false);

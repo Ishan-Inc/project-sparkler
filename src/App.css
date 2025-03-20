@@ -36,6 +36,7 @@
 * {
   animation-fill-mode: forwards !important;
   visibility: visible !important; /* Force visibility */
+  opacity: 1 !important; /* Ensure everything is visible */
 }
 
 @media (prefers-reduced-motion: no-preference) {

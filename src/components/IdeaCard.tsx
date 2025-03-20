@@ -25,7 +25,7 @@ const IdeaCard: React.FC<IdeaCardProps> = ({
     beginner: 'text-green-600',
     intermediate: 'text-amber-600',
     advanced: 'text-rose-600',
-  }[idea.difficulty];
+  }[idea.difficulty] || 'text-slate-600'; // Default color if difficulty is undefined
 
   const handleSave = () => {
     setIsBookmarked(!isBookmarked);
@@ -82,29 +82,33 @@ const IdeaCard: React.FC<IdeaCardProps> = ({
         </div>
         
         <div className="flex flex-wrap gap-2">
-          {idea.tags.map((tag) => (
-            <span 
-              key={tag.name}
-              className={cn(
-                "text-xs px-2 py-1 rounded-full",
-                tag.color
-              )}
-            >
-              {tag.name}
-            </span>
+          {idea.tags && idea.tags.map((tag) => (
+            tag && tag.name ? (
+              <span 
+                key={tag.name}
+                className={cn(
+                  "text-xs px-2 py-1 rounded-full",
+                  tag.color || "bg-slate-100 text-slate-700"
+                )}
+              >
+                {tag.name}
+              </span>
+            ) : null
           ))}
         </div>
         
         <div>
           <h4 className="text-xs font-medium text-slate-700 mb-2">Tech Stack</h4>
           <div className="flex flex-wrap gap-2">
-            {idea.techStack.map((tech) => (
-              <span 
-                key={tech.name}
-                className="text-xs px-2 py-1 bg-slate-100 text-slate-700 rounded-full"
-              >
-                {tech.name}
-              </span>
+            {idea.techStack && idea.techStack.map((tech) => (
+              tech && tech.name ? (
+                <span 
+                  key={tech.name}
+                  className="text-xs px-2 py-1 bg-slate-100 text-slate-700 rounded-full"
+                >
+                  {tech.name}
+                </span>
+              ) : null
             ))}
           </div>
         </div>
@@ -112,11 +116,13 @@ const IdeaCard: React.FC<IdeaCardProps> = ({
         <div>
           <h4 className="text-xs font-medium text-slate-700 mb-2">Learning Outcomes</h4>
           <ul className="text-xs text-slate-600 space-y-1">
-            {idea.learningOutcomes.map((outcome, index) => (
-              <li key={index} className="flex items-start gap-2">
-                <CheckCircle className="h-3 w-3 text-primary mt-0.5" />
-                <span>{outcome}</span>
-              </li>
+            {idea.learningOutcomes && idea.learningOutcomes.map((outcome, index) => (
+              outcome ? (
+                <li key={index} className="flex items-start gap-2">
+                  <CheckCircle className="h-3 w-3 text-primary mt-0.5" />
+                  <span>{outcome}</span>
+                </li>
+              ) : null
             ))}
           </ul>
         </div>
