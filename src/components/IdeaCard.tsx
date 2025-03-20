@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { Idea } from '@/utils/ideaData';
-import { Bookmark, CheckCircle, Clock, Activity } from 'lucide-react';
+import { Bookmark, CheckCircle, Clock, Activity, Code } from 'lucide-react';
 
 interface IdeaCardProps {
   idea: Idea;
@@ -69,7 +69,7 @@ const IdeaCard: React.FC<IdeaCardProps> = ({
           <p className="text-sm text-slate-600 line-clamp-3">{idea.description}</p>
         </div>
 
-        <div className="flex items-center gap-3 text-xs text-slate-500">
+        <div className="flex items-center gap-3 text-xs text-slate-500 flex-wrap">
           <div className={cn("flex items-center gap-1", difficultyColor)}>
             <Activity className="h-3 w-3" />
             <span className="capitalize">{idea.difficulty}</span>
@@ -78,6 +78,11 @@ const IdeaCard: React.FC<IdeaCardProps> = ({
           <div className="flex items-center gap-1">
             <Clock className="h-3 w-3" />
             <span>{idea.duration}</span>
+          </div>
+          
+          <div className="flex items-center gap-1 text-indigo-600">
+            <Code className="h-3 w-3" />
+            <span>{idea.language || 'Any'}</span>
           </div>
         </div>
         

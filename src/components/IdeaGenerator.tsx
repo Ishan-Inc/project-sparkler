@@ -1,9 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, RefreshCw, Filter, ChevronDown, Check } from 'lucide-react';
 import IdeaCard from './IdeaCard';
-import { getRandomIdeas, filterIdeas, Idea, ideasDatabase, tags } from '@/utils/ideaData';
+import { getRandomIdeas, filterIdeas, Idea, ideasDatabase, tags, languages } from '@/utils/ideaData';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface IdeaGeneratorProps {
   className?: string;
@@ -17,6 +19,7 @@ const IdeaGenerator: React.FC<IdeaGeneratorProps> = ({ className }) => {
   const [filters, setFilters] = useState({
     difficulty: '',
     tags: [] as string[],
+    language: '',
   });
 
   useEffect(() => {
@@ -37,7 +40,8 @@ const IdeaGenerator: React.FC<IdeaGeneratorProps> = ({ className }) => {
         ideasDatabase,
         { 
           difficulty: filters.difficulty || undefined, 
-          tags: filters.tags.length ? filters.tags : undefined 
+          tags: filters.tags.length ? filters.tags : undefined,
+          language: filters.language || undefined
         }
       );
 
@@ -74,10 +78,18 @@ const IdeaGenerator: React.FC<IdeaGeneratorProps> = ({ className }) => {
     }));
   };
 
+  const setLanguage = (language: string) => {
+    setFilters(prev => ({
+      ...prev,
+      language
+    }));
+  };
+
   const clearFilters = () => {
     setFilters({
       difficulty: '',
-      tags: []
+      tags: [],
+      language: ''
     });
   };
 
@@ -144,7 +156,7 @@ const IdeaGenerator: React.FC<IdeaGeneratorProps> = ({ className }) => {
               "text-slate-700",
               "transition-all duration-300 ease-expo-out",
               "hover:border-slate-300 hover:bg-slate-50",
-              (filters.difficulty || filters.tags.length > 0) && "bg-slate-50 border-slate-300"
+              (filters.difficulty || filters.tags.length > 0 || filters.language) && "bg-slate-50 border-slate-300"
             )}
           >
             <Filter className="h-4 w-4" />
@@ -176,48 +188,74 @@ const IdeaGenerator: React.FC<IdeaGeneratorProps> = ({ className }) => {
                   </button>
                 </div>
                 
-                <div className="mb-4">
-                  <h4 className="text-xs text-slate-500 mb-2">Difficulty Level</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {['beginner', 'intermediate', 'advanced'].map(level => (
-                      <button
-                        key={level}
-                        onClick={() => setDifficulty(level)}
-                        className={cn(
-                          "text-xs px-3 py-1.5 rounded-full capitalize",
-                          "border transition-colors",
-                          filters.difficulty === level
-                            ? "bg-primary/10 border-primary/30 text-primary"
-                            : "border-slate-200 hover:border-slate-300"
-                        )}
-                      >
-                        {level}
-                      </button>
-                    ))}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="text-xs text-slate-500 mb-2">Difficulty Level</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {['beginner', 'intermediate', 'advanced'].map(level => (
+                          <button
+                            key={level}
+                            onClick={() => setDifficulty(level)}
+                            className={cn(
+                              "text-xs px-3 py-1.5 rounded-full capitalize",
+                              "border transition-colors",
+                              filters.difficulty === level
+                                ? "bg-primary/10 border-primary/30 text-primary"
+                                : "border-slate-200 hover:border-slate-300"
+                            )}
+                          >
+                            {level}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="text-xs text-slate-500 mb-2">Programming Language</h4>
+                      <div className="w-full max-w-xs">
+                        <Select
+                          value={filters.language}
+                          onValueChange={setLanguage}
+                        >
+                          <SelectTrigger className="w-full bg-white">
+                            <SelectValue placeholder="Select a language" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="">Any Language</SelectItem>
+                            {languages.map(language => (
+                              <SelectItem key={language} value={language}>
+                                {language}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                
-                <div>
-                  <h4 className="text-xs text-slate-500 mb-2">Project Type</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {Object.values(tags).map(tag => (
-                      <button
-                        key={tag.name}
-                        onClick={() => toggleFilter(tag.name)}
-                        className={cn(
-                          "text-xs px-3 py-1.5 rounded-full",
-                          "border transition-colors flex items-center gap-1.5",
-                          filters.tags.includes(tag.name)
-                            ? "bg-primary/10 border-primary/30 text-primary"
-                            : "border-slate-200 hover:border-slate-300"
-                        )}
-                      >
-                        {filters.tags.includes(tag.name) && (
-                          <Check className="h-3 w-3" />
-                        )}
-                        {tag.name}
-                      </button>
-                    ))}
+                  
+                  <div>
+                    <h4 className="text-xs text-slate-500 mb-2">Project Type</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {Object.values(tags).map(tag => (
+                        <button
+                          key={tag.name}
+                          onClick={() => toggleFilter(tag.name)}
+                          className={cn(
+                            "text-xs px-3 py-1.5 rounded-full",
+                            "border transition-colors flex items-center gap-1.5",
+                            filters.tags.includes(tag.name)
+                              ? "bg-primary/10 border-primary/30 text-primary"
+                              : "border-slate-200 hover:border-slate-300"
+                          )}
+                        >
+                          {filters.tags.includes(tag.name) && (
+                            <Check className="h-3 w-3" />
+                          )}
+                          {tag.name}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
